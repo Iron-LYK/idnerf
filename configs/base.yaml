@@ -1,0 +1,64 @@
+# default
+
+name:                                                       # name of experiment run
+yaml:                                                       # config file (must be specified from command line)
+model: idnerf                                            # type of model
+seed: 0                                                     # seed number (for both numpy and pytorch)
+gpu_ids: [0]                                                # GPU id list
+cpu: false                                                  # run only on CPU (not supported now)
+load:                                                       # load checkpoint from filename
+n_src_views: 3                                              # number of source views
+batch_size: 1                                               # batch size
+max_epoch: 25                                               # train to maximum number of epochs
+resume: false
+output_root: outputs                                        # root path for output files (checkpoints and results)
+vis_depth: true
+
+fp16:
+vram_O:
+sd_version: '2.1'
+hf_key:
+t_range: [0.02, 0.98]
+guidance_scale: 100
+lambda_guidance: 1
+
+encoder:
+    attn_splits_list: [2]
+    cos_n_group: [2, 8]
+    pretrain_weight: configs/pretrained_models/gmflow_sintel-0c07dcb3.pth
+    num_transformer_layers: 6
+    feature_upsampler: network
+    upsample_factor: 2
+    use_multiview_gmflow: false
+    add_per_view_attn: false                                # only for multiview version of gmflow
+    wo_self_attn: false
+    feature_sample_local_radius: 0
+    feature_sample_local_dilation: 1
+
+latent_inference:
+    input_channel: 9
+    latent_dim: 4
+
+decoder:                                                    # architectural options
+    net_width: 128
+    net_depth: 6
+    skip: [4]                                               # skip connections
+    posenc:                                                 # positional encoding
+        L_3D: 10                                            # number of bases (3D point)
+        L_view: 0                                           # number of bases (viewpoint)
+    raytrans_posenc: false
+    density_maskfill: false
+    raytrans_act: ReLU
+
+nerf:                                                       
+    legacy_coord: true                                      
+    wo_render_interval: true
+    view_dep: true                                          
+    depth:                                                  
+        param: metric                                      
+    sample_intvs: 128                                       
+    sample_stratified: true                                
+    density_noise_reg:                                     
+    render_video: false
+
+tb:                                                         # TensorBoard options

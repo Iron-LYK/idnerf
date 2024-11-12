@@ -1,0 +1,69 @@
+_parent_: configs/base.yaml
+
+tb: true
+batch_size: 1                                                 
+max_epoch: 25                                                
+sanity_check: false
+save_test_image: false
+
+nerf:
+    rand_rays_train: 1024                                    
+    rand_rays_val: 4096                                    
+    rand_rays_test: 4096                                    
+
+data_train:                                                       
+    root_dir: /your_data_path/DTU
+    dataset_name: dtu                                     
+    img_wh: [640, 512]                                   
+    num_workers: 0                                      
+    max_len: -1
+
+data_val:
+    root_dir: /your_data_path/DTU
+    dataset_name: dtu                                
+    img_wh: [640, 512]                                 
+    num_workers: 0                                   
+    max_len: 5
+
+data_test:
+    dtu:
+        root_dir: /your_data_path/DTU
+        dataset_name: dtu                                      
+        img_wh: [640, 512]                                 
+        num_workers: 0                                   
+        max_len: -1
+    llff:
+        root_dir: /your_data_path/llff
+        dataset_name: llff                                
+        img_wh: [960, 640]                         
+        num_workers: 0                            
+        max_len: -1
+
+loss_weight:                                              
+    render: 1                                             
+    render_fine:                                       
+
+optim:                                                      # optimization options
+    lr_enc: 5.e-5                                               
+    lr_dec: 5.e-5 
+    lr_other: 1.e-3   
+    clip_enc: 1.
+    algo:
+        type: AdamW
+        weight_decay: 1.e-4
+    sched:                                               
+        type: OneCycleLR                               
+        pct_start: 0.05
+        cycle_momentum: false
+        anneal_strategy: cos
+
+freq:                                                    
+    scalar: 20                                        
+    log_ep: 1
+    ckpt_ep: 1                                         
+    ckpt_it: 0.1                                  
+    val_ep: -1
+    val_it: 0.5                                       
+    test_ep: 1                                   
+    test_ep_start: 0
+    test_it: -1
